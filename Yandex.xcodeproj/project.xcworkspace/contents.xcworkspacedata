@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:YandexTranslator.xcodeproj">
+      location = "self:/Users/admin/Desktop/YandexTranslator/Yandex.xcodeproj">
    </FileRef>
 </Workspace>

@@ -13,10 +13,13 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (readonly, strong) NSPersistentContainer *persistentContainer;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) NSManagedObjectModel *managedObjectModel;
+@property (nonatomic, strong) NSPersistentStoreCoordinator *persistantStoreCoordinator;
+
+@property (nonatomic, readonly, strong) NSPersistentContainer *persistentContainer;
 
 - (void)saveContext;
-
 
 @end
 

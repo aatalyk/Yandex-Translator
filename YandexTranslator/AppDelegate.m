@@ -1,4 +1,4 @@
-//
+ //
 //  AppDelegate.m
 //  YandexTranslator
 //
@@ -7,6 +7,11 @@
 //
 
 #import "AppDelegate.h"
+#import "TranslateViewController.h"
+#import "PhrasebookViewController.h"
+#import "UIColor+CustomColor.h"
+#import "UIFont+CustomFont.h"
+#import "SettingsViewController.h"
 
 @interface AppDelegate ()
 
@@ -14,9 +19,51 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    
+    [self.window makeKeyAndVisible];
+    
+    NSMutableArray *tabItems = [[NSMutableArray alloc] initWithCapacity:3];
+    
+    NSDictionary *tabBarItemTextAttribute = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"Open Sans" size:12], NSFontAttributeName, [UIColor whiteColor], NSForegroundColorAttributeName, nil];
+    
+    PhrasebookViewController *phrasebookViewController = [[PhrasebookViewController alloc]init];
+    UINavigationController *phrasebookNavigationController = [[UINavigationController alloc]initWithRootViewController:phrasebookViewController];
+    phrasebookNavigationController.title = @"Phrasebook";
+    phrasebookNavigationController.tabBarItem.image = [[UIImage imageNamed:@"star"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    [phrasebookNavigationController.tabBarItem setTitleTextAttributes:tabBarItemTextAttribute forState:UIControlStateNormal];
+    [tabItems addObject:phrasebookNavigationController];
+    
+    TranslateViewController *translateViewController = [[TranslateViewController alloc] init];
+    UINavigationController *translateNavigationController = [[UINavigationController alloc] initWithRootViewController:translateViewController];
+    translateNavigationController.title = @"Translate";
+    translateNavigationController.tabBarItem.image = [[UIImage imageNamed:@"az"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    [translateNavigationController.tabBarItem setTitleTextAttributes:tabBarItemTextAttribute forState:UIControlStateNormal];
+    [tabItems addObject:translateNavigationController];
+    
+    SettingsViewController *settingsViewController = [[SettingsViewController alloc]init];
+    UINavigationController *settingsNavigationController = [[UINavigationController alloc]initWithRootViewController:settingsViewController];
+    settingsNavigationController.title = @"Settings";
+    settingsNavigationController.tabBarItem.image = [[UIImage imageNamed:@"settings"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    [settingsNavigationController.tabBarItem setTitleTextAttributes:tabBarItemTextAttribute forState:UIControlStateNormal];
+    [tabItems addObject:settingsNavigationController];
+    
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+    tabBarController.viewControllers = tabItems;
+    [UITabBar appearance].barTintColor = [UIColor mainBlueColor];
+    [UITabBar appearance].tintColor = [UIColor mainBlueColor];
+        
+    [UINavigationBar appearance].tintColor = [UIColor mainBlueColor];
+    [UINavigationBar appearance].barTintColor = [UIColor mainBlueColor];
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
+    tabBarController.selectedIndex = 1;
+    
+    self.window.rootViewController = tabBarController;
+    
     return YES;
 }
 
@@ -49,7 +96,6 @@
     [self saveContext];
 }
 
-
 #pragma mark - Core Data stack
 
 @synthesize persistentContainer = _persistentContainer;
@@ -58,7 +104,7 @@
     // The persistent container for the application. This implementation creates and returns a container, having loaded the store for the application to it.
     @synchronized (self) {
         if (_persistentContainer == nil) {
-            _persistentContainer = [[NSPersistentContainer alloc] initWithName:@"YandexTranslator"];
+            _persistentContainer = [[NSPersistentContainer alloc] initWithName:@"CoreDataModel"];
             [_persistentContainer loadPersistentStoresWithCompletionHandler:^(NSPersistentStoreDescription *storeDescription, NSError *error) {
                 if (error != nil) {
                     // Replace this implementation with code to handle the error appropriately.
@@ -71,7 +117,7 @@
                      * The device is out of space.
                      * The store could not be migrated to the current model version.
                      Check the error message to determine what the actual problem was.
-                    */
+                     */
                     NSLog(@"Unresolved error %@, %@", error, error.userInfo);
                     abort();
                 }
